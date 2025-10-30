@@ -1,9 +1,16 @@
 # 开发环境配置文件
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# D:\projects\python\django\meiduo_project\meiduo_mall\meiduo_mall
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# 追加导包路径指向apps包
+# 导包路径存储在 sys.path 这个环境变量中
+# sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
+sys.path.insert(0, str(BASE_DIR / 'apps'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -17,7 +24,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -27,6 +33,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'meiduo_mall.apps.users.apps.UsersConfig',
+    'contents'
 ]
 
 MIDDLEWARE = [
@@ -72,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'meiduo_mall.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -86,7 +93,6 @@ DATABASES = {
         'NAME': 'meiduo',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -106,7 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -118,12 +123,11 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / 'static',]
+STATICFILES_DIRS = [BASE_DIR / 'static', ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -136,6 +140,7 @@ CACHES = {
         "LOCATION": "redis://192.168.10.50:6379/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "123456"
         }
     },
     "session": {
@@ -143,6 +148,7 @@ CACHES = {
         "LOCATION": "redis://192.168.10.50:6379/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "123456"
         }
     },
     "verify_code": {
@@ -150,6 +156,7 @@ CACHES = {
         "LOCATION": "redis://192.168.10.50:6379/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": "123456"
         }
     },
 }
@@ -196,3 +203,6 @@ LOGGING = {
         },
     }
 }
+
+# 指定自定义的用户模型类：‘子应用.用户模型类'
+AUTH_USER_MODEL = 'users.USer'
