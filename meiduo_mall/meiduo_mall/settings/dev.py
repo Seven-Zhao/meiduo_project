@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 导包路径存储在 sys.path 这个环境变量中
 # sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, str(BASE_DIR / 'apps'))
+# print(sys.path)
 
 
 # Quick-start development settings - unsuitable for production
@@ -51,6 +52,7 @@ ROOT_URLCONF = 'meiduo_mall.urls'
 
 TEMPLATES = [
     {
+        'NAME': 'Jinja2',
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
         'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
@@ -64,6 +66,7 @@ TEMPLATES = [
         },
     },
     {
+        'NAME': 'Django',
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
         'APP_DIRS': True,
@@ -205,4 +208,4 @@ LOGGING = {
 }
 
 # 指定自定义的用户模型类：‘子应用.用户模型类'
-AUTH_USER_MODEL = 'users.USer'
+AUTH_USER_MODEL = 'users.User'

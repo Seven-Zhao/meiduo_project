@@ -11,6 +11,9 @@ const app = createApp({
             mobile: '',
             // Vue 3 建议初始化为布尔值（而非空字符串）
             allow: false,
+            image_code_url: '',
+            uuid: '',
+            image_code: '',
             // v-show
             error_name: false,
             error_password: false,
@@ -20,9 +23,21 @@ const app = createApp({
             // error_message
             error_name_message: '',
             error_mobile_message: '',
+            error_image_code_message: '',
+            error_image_code: false,
+
         }
     },
+    mounted() { // 页面加载完会被调用mounted函数
+        // 生成图形验证码
+        this.generate_image_code()
+    },
     methods: {
+        // 生成图形验证码的方法：封装的思想，实现代码复用，在mounted中可以直接调用
+        generate_image_code() {
+            this.uuid = generateUUID()
+            this.image_code_url = '/image_codes/' + this.uuid + '/'
+        },
         // 校验用户名
         check_username() {
             let re = /^[a-zA-Z0-9_-]{5,20}$/;
@@ -63,7 +78,7 @@ const app = createApp({
         },
         // 校验确认密码
         check_password2() {
-            this.error_password2 = this.password != this.password2;
+            this.error_password2 = this.password !== this.password2;
         },
         // 校验手机号
         check_mobile() {
@@ -99,6 +114,15 @@ const app = createApp({
         check_allow() {
             this.error_allow = !this.allow;
         },
+        // 图形验证码校验
+        check_image_code() {
+            if (this.image_code.length !== 4) {
+                this.error_image_code_message = '请填写图片验证码';
+                this.error_image_code = true;
+            } else {
+                this.error_image_code = false;
+            }
+        },
         // 监听表单提交事件
         on_submit(event) {
             this.check_username();
@@ -106,8 +130,9 @@ const app = createApp({
             this.check_password2();
             this.check_mobile();
             this.check_allow();
-            if (this.error_name == true || this.error_password == true || this.error_password2 == true
-                || this.error_mobile == true || this.error_allow == true) {
+            this.check_image_code();
+            if (this.error_name === true || this.error_password === true || this.error_password2 === true
+                || this.error_mobile === true || this.error_allow === true) {
                 // 禁用表单的提交
                 event.preventDefault()
             }
