@@ -6,6 +6,7 @@ from django.views import View
 import re
 
 from django.db import DatabaseError
+from django_redis import get_redis_connection
 
 from users.models import User
 
@@ -53,7 +54,7 @@ class RegisterView(View):
         """
         return render(request, 'register.html')
 
-    def post(self, request):
+    def post(self, request, redis_connection=None):
         """
         实现用户注册逻辑
         :param request: 请求对象
@@ -65,6 +66,7 @@ class RegisterView(View):
         password = request_params.get('password')
         password2 = request_params.get('password2')
         mobile = request_params.get('mobile')
+        sms_code_client = request_params.get('sms_code')
         allow = request_params.get('allow')
 
         # 校验参数: 前后端的校验要分开，避免恶意用户越过前端逻辑发送请求
@@ -84,6 +86,16 @@ class RegisterView(View):
         # 判断手机号是否合法
         if not re.match(r'^1[3-9]\d{9}$', mobile):
             return http.HttpResponseForbidden('请输入正确的手机号码')
+
+        # 判断短信验证码是否正确
+        redis_conn = get_redis_connection('verify_code')
+        sms_code_server = redis_conn.get('sms_%s' % mobile).decode()
+        if sms_code_server is None:
+            return render(request, 'register.html', {'sms_code_errmsg': '短信验证码已失效'})
+
+        if sms_code_client != sms_code_server:
+            return render(request, 'register.html', {'sms_code_errmsg': '输入短信验证码有误'})
+
         # 判断是否勾选用户协议
         if allow != 'on':
             return http.HttpResponseForbidden('请勾选用户协议')

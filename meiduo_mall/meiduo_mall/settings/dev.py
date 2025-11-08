@@ -193,6 +193,16 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(os.path.dirname(BASE_DIR), 'logs/meiduo.log'),  # 日志文件的位置
+            'encoding': 'utf-8',
+            'maxBytes': 300 * 1024 * 1024,
+            'backupCount': 10,
+            'formatter': 'verbose'
+        },
+        'sms_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(os.path.dirname(BASE_DIR), 'logs/sms.log'),
+            'encoding': 'utf-8',
             'maxBytes': 300 * 1024 * 1024,
             'backupCount': 10,
             'formatter': 'verbose'
@@ -204,6 +214,11 @@ LOGGING = {
             'propagate': True,  # 是否继续传递日志信息
             'level': 'INFO',  # 日志器接收的最低日志级别
         },
+        'sms': {
+            'handlers': ['console', 'sms_file'],
+            'level': 'INFO',
+            'propagate': False
+        }
     }
 }
 
