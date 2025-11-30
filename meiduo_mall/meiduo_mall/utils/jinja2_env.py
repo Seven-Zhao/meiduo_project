@@ -20,7 +20,8 @@ def jinja2_environment(**options):
     # 自定义语法：{{ static('静态文件相对路径') }} , {{ path('路由命名空间') }}
     env.globals.update({
         'static': staticfiles_storage.url,
-        'path': reverse
+        'path': reverse,
+        'url': reverse,
     })
     # 返回环境对象，
     return env

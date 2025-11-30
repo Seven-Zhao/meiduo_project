@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-7=8uk($*!6x993$9&5*w5#@0=j(-6#o*g1bo)86rho$_zjn=6+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", 'www.meiduo.site']
 
 # Application definition
 
@@ -35,7 +35,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'meiduo_mall.apps.users.apps.UsersConfig',
-    'contents'
+    'contents',
+    'meiduo_mall.apps.oauth.apps.OauthConfig',
+    'meiduo_mall.apps.areas.apps.AreasConfig',
+    'meiduo_mall.apps.goods.apps.GoodsConfig',
 ]
 
 MIDDLEWARE = [
@@ -224,3 +227,30 @@ LOGGING = {
 
 # 指定自定义的用户模型类：‘子应用.用户模型类'
 AUTH_USER_MODEL = 'users.User'
+
+# 指定自定义的用户认证后端
+AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileAuthBackend']
+
+# 判断用户是否登录，未登录用户重定向的地址
+LOGIN_URL = '/login/'
+
+# QQ登录配置参数
+QQ_CLIENT_ID = '101518219'
+QQ_CLIENT_SECRET = '418d84ebdc7241efb79536886ae95224'
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8000/oauth_callback'
+
+# 配置邮件服务器
+# 指定邮件后端
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# 发邮件主机
+EMAIL_HOST = 'smtp.163.com'
+# 发邮件端口
+EMAIL_PORT = 25
+# 授权的邮箱
+EMAIL_HOST_USER = 'sevenlucky1990@163.com'
+# 邮箱授权时获得的密码，非注册登录密码
+EMAIL_HOST_PASSWORD = 'VDhjJ33kmA2QZ9cc'
+# 发件人抬头
+EMAIL_FROM = '美多商城<sevenlucky1990@163.com>'
+
+EMAIL_VERIFY_URL = 'http://www.meiduo.site:8000/emails/verification/'
